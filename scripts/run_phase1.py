@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Phase 1 (Baseline) and Phase 2 (Preprocessing Recovery) CLI entry point."""
 
 import argparse
 import logging
