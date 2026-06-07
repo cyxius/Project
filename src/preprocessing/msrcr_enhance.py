@@ -1,11 +1,6 @@
-import logging
-import time
 from pathlib import Path
-
 import cv2
 import numpy as np
-
-logger = logging.getLogger(__name__)
 
 
 def msrcr(
@@ -39,38 +34,17 @@ def msrcr(
     return out
 
 
-def enhance_directory(
-    input_dir: Path,
-    output_dir: Path,
-    sigma_list: list[float] = None,
-    alpha: float = 125.0,
-    beta: float = 46.0,
-) -> dict:
-    
+def enhance_directory(input_dir, output_dir, sigma_list=None, alpha=125.0, beta=46.0):
     if sigma_list is None:
         sigma_list = [15, 80, 250]
-
     output_dir.mkdir(parents=True, exist_ok=True)
-
-    image_files = sorted(input_dir.glob("*.jpg"))
-    if not image_files:
-        logger.warning("No .jpg images in %s", input_dir)
-        return {"image_count": 0, "time_elapsed_sec": 0, "avg_ms_per_image": 0}
-
-    logger.info("MSRCR: processing %d images ...", len(image_files))
-    t_start = time.time()
-
-    for img_path in image_files:
-        image = cv2.imread(str(img_path))
-        if image is None:
-            logger.warning("Failed to read %s", img_path)
-            continue
-        enhanced = msrcr(image, sigma_list=sigma_list, alpha=alpha, beta=beta)
-        cv2.imwrite(str(output_dir / img_path.name), enhanced)
-
-    elapsed = time.time() - t_start
-    count = len(image_files)
-    avg_ms = (elapsed / count) * 1000 if count > 0 else 0
-
-    logger.info("MSRCR complete: %d images in %.1fs (%.0f ms/image).", count, elapsed, avg_ms)
-    return {"image_count": count, "time_elapsed_sec": round(elapsed, 1), "avg_ms_per_image": round(avg_ms, 1)}
+    imgs = list(input_dir.glob("*.jpg"))
+    print(f"MSRCR: {len(imgs)} images")
+    done = 0
+    for p in imgs:
+        img = cv2.imread(str(p))
+        if img is not None:
+            cv2.imwrite(str(output_dir / p.name), msrcr(img, sigma_list, alpha, beta))
+            done += 1
+    print(f"MSRCR done: {done}")
+    return done

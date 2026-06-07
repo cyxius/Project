@@ -1,11 +1,6 @@
-import logging
-import time
 from pathlib import Path
-
 import cv2
 import numpy as np
-
-logger = logging.getLogger(__name__)
 
 
 def enhance(
@@ -24,34 +19,19 @@ def enhance(
     return cv2.cvtColor(lab_eq, cv2.COLOR_LAB2BGR)
 
 
-def enhance_directory(
-    input_dir: Path,
-    output_dir: Path,
-    clip_limit: float = 2.0,
-    tile_grid_size: tuple[int, int] = (8, 8),
-) -> dict:
-    
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    image_files = sorted(input_dir.glob("*.jpg"))
-    if not image_files:
-        logger.warning("No .jpg images in %s", input_dir)
-        return {"image_count": 0, "time_elapsed_sec": 0, "avg_ms_per_image": 0}
-
-    logger.info("CLAHE: processing %d images ...", len(image_files))
-    t_start = time.time()
-
-    for img_path in image_files:
-        image = cv2.imread(str(img_path))
-        if image is None:
-            logger.warning("Failed to read %s", img_path)
+def enhance_directory(input_dir, output_dir, clip_limit=2.0, tile_grid_size=(8, 8)):
+    import os
+    os.makedirs(output_dir, exist_ok=True)
+    files = [f for f in os.listdir(input_dir) if f.endswith('.jpg')]
+    if not files:
+        return
+    n = 0
+    for fname in files:
+        img = cv2.imread(os.path.join(input_dir, fname))
+        if img is None:
             continue
-        enhanced = enhance(image, clip_limit=clip_limit, tile_grid_size=tile_grid_size)
-        cv2.imwrite(str(output_dir / img_path.name), enhanced)
-
-    elapsed = time.time() - t_start
-    count = len(image_files)
-    avg_ms = (elapsed / count) * 1000 if count > 0 else 0
-
-    logger.info("CLAHE complete: %d images in %.1fs (%.0f ms/image).", count, elapsed, avg_ms)
-    return {"image_count": count, "time_elapsed_sec": round(elapsed, 1), "avg_ms_per_image": round(avg_ms, 1)}
+        out = enhance(img, clip_limit=clip_limit, tile_grid_size=tile_grid_size)
+        cv2.imwrite(os.path.join(output_dir, fname), out)
+        n += 1
+    print(f"CLAHE done: {n} images")
+    return n

@@ -56,16 +56,7 @@ def compute_map(
 
     if not all_tp:
         logger.warning("No predictions found for any image with ground truth.")
-        return {
-            "mAP": 0.0,
-            "per_class_ap": {},
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0,
-            "num_images": image_count,
-            "num_predictions": 0,
-            "num_gt_boxes": len(all_gt_cls),
-        }
+        return {"mAP": 0.0, "num_images": image_count}
 
     tp_arr = np.array(all_tp, dtype=bool).reshape(-1, 1)
     conf_arr = np.array(all_conf, dtype=np.float32)

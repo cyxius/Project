@@ -32,10 +32,8 @@ def build_weather_mapping(
             if name and weather and name in existing:
                 weather_map[name] = weather.lower().strip()
 
-    counts = {}
-    for w in weather_map.values():
-        counts[w] = counts.get(w, 0) + 1
-    for w, c in sorted(counts.items(), key=lambda x: -x[1]):
+    from collections import Counter
+    for w, c in Counter(weather_map.values()).most_common():
         logger.info("  Weather '%s': %d images", w, c)
 
     return weather_map
