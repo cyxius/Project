@@ -21,10 +21,6 @@ def main():
         help="Path to config YAML file.",
     )
     parser.add_argument(
-        "--skip-download", action="store_true",
-        help="Skip BDD100K dataset verification.",
-    )
-    parser.add_argument(
         "--subset", type=int, default=None,
         help="Number of images per split for quick testing.",
     )
@@ -56,7 +52,6 @@ def main():
         from src.pipeline import run_phase1
         run_phase1(
             config_path=args.config,
-            skip_download=args.skip_download,
             subset_size=args.subset,
         )
 

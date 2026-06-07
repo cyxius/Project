@@ -11,7 +11,7 @@ from .evaluation.metrics import compute_map, save_metrics
 logger = logging.getLogger(__name__)
 
 
-def run_phase1(config_path: str, skip_download: bool = False, subset_size: int = None) -> dict:
+def run_phase1(config_path: str, subset_size: int = None) -> dict:
     config = load_config(config_path)
 
     output_dir = config.output_dir

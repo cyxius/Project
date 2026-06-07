@@ -10,7 +10,7 @@ from PIL import Image
 logger = logging.getLogger(__name__)
 
 
-def _bbox_to_xyxy(bbox: list[float]) -> tuple[float, float, float, float]:
+def _bbox_to_xyxy(bbox):
     x, y, w, h = bbox
     return (x, y, x + w, y + h)
 
