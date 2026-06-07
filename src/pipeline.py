@@ -127,7 +127,7 @@ def run_phase2(
                 generate_yolo_yaml(sdir, config.dataset.class_names, sdir / f"data_{sk}.yaml")
             break
 
-    logger.info("mSRCR Enhancement")
+    logger.info("MSRCR preprocessing...")
     from .preprocessing import msrcr_directory
 
     adverse_img = config.dataset.processed_dir / "adverse" / "images"
@@ -142,7 +142,7 @@ def run_phase2(
     else:
         logger.info("Skipping MSRCR (--skip-preprocessing).")
 
-    logger.info("cLAHE Enhancement")
+    logger.info("CLAHE preprocessing...")
     from .preprocessing import enhance_directory
 
     clahe_out = config.dataset.processed_dir / "adverse_clahe" / "images"
@@ -155,7 +155,7 @@ def run_phase2(
     else:
         logger.info("Skipping CLAHE (--skip-preprocessing).")
 
-    logger.info("running batch inference")
+    logger.info("Running inference...")
     from ultralytics import YOLO
 
     model = YOLO(config.model.weights)
@@ -175,7 +175,7 @@ def run_phase2(
             imgsz=config.model.imgsz, device=config.model.device, split_name=sp["key"],
         )
 
-    logger.info("computing evaluation metrics")
+    logger.info("Computing metrics...")
     all_metrics = {}
     for sp in SPLITS:
         pred_json = output_dir / "predictions" / f"{sp['key']}_predictions.json"
@@ -189,7 +189,7 @@ def run_phase2(
         save_metrics(metrics, output_dir / "metrics" / f"{sp['key']}_metrics.json")
         all_metrics[sp["key"]] = metrics
 
-    logger.info("per-weather breakdown")
+    logger.info("Per-weather breakdown...")
     from .data.weather import build_weather_mapping, compute_weather_metrics
 
     weather_map = build_weather_mapping(

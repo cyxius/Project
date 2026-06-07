@@ -19,22 +19,6 @@ def predict_directory(
     device: str = "cpu",
     split_name: str = "",
 ) -> dict:
-    """
-    Run YOLO batch inference on an image directory, save detections as JSON.
-
-    Args:
-        model: Loaded ultralytics YOLO model.
-        image_dir: Directory containing .jpg images.
-        output_json: Path to write the predictions JSON file.
-        conf: Confidence threshold.
-        iou: NMS IoU threshold.
-        imgsz: Input image size.
-        device: 'cpu' or 'cuda:0'.
-        split_name: Label for progress logging (e.g. 'clean', 'foggy').
-
-    Returns:
-        dict with keys: image_count, detection_count, avg_det_per_image.
-    """
     image_dir = Path(image_dir)
     if not image_dir.is_dir():
         raise FileNotFoundError(f"Image directory not found: {image_dir}")

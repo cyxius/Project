@@ -46,9 +46,6 @@ def test_no_match_low_iou():
 
 
 def test_partial_overlap():
-    """Prediction partially overlaps GT with IoU ~0.25, above threshold."""
-    # Two 100x100 boxes overlapping by 50px in each dimension
-    # IoU = (50*50) / (100*100 + 100*100 - 50*50) = 2500 / 17500 ≈ 0.142
     pred_boxes = torch.tensor([[50, 50, 150, 150]], dtype=torch.float32)
     pred_classes = torch.tensor([0], dtype=torch.int64)
     pred_confs = torch.tensor([0.9], dtype=torch.float32)

@@ -29,13 +29,13 @@ dataset:
   # DSDL class name -> COCO class id
   class_mapping:
     person: 0
-    rider: 0       # rider -> person (YOLO doesn't distinguish)
+    rider: 0
     car: 2
     truck: 7
     bus: 5
     train: 6
-    motor: 3       # motorcycle
-    bike: 1        # bicycle
+    motor: 3
+    bike: 1
 
   class_names:
     0: person

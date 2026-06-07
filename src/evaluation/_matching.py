@@ -7,12 +7,6 @@ import torchvision.ops as tv_ops
 
 
 def load_ground_truth_yolo(label_dir: Path, img_dir: Path) -> dict:
-    """
-    Load YOLO-format ground truth labels, converting to absolute xyxy.
-
-    Returns:
-        dict mapping image_name -> list of {"bbox": [x1,y1,x2,y2], "class_id": int}
-    """
     from PIL import Image
 
     gt = {}
@@ -57,12 +51,6 @@ def load_ground_truth_yolo(label_dir: Path, img_dir: Path) -> dict:
 
 
 def load_predictions_json(json_path: Path) -> dict:
-    """
-    Load prediction JSON into dict keyed by image_name.
-
-    Returns:
-        dict mapping image_name -> list of {"bbox": [x1,y1,x2,y2], "confidence": float, "class_id": int}
-    """
     with open(json_path, "r") as f:
         data = json.load(f)
 
@@ -89,20 +77,6 @@ def match_per_image(
     gt_classes: torch.Tensor,
     iou_threshold: float,
 ) -> tuple:
-    """
-    Match predictions to ground truth for one image.
-
-    Args:
-        pred_boxes: [Np, 4] xyxy tensor, sorted by confidence descending
-        pred_classes: [Np] class id tensor
-        pred_confs: [Np] confidence tensor
-        gt_boxes: [Ng, 4] xyxy tensor
-        gt_classes: [Ng] class id tensor
-        iou_threshold: minimum IoU for a match
-
-    Returns:
-        (tp_list, conf_list, pred_cls_list, num_gt)
-    """
     if len(gt_boxes) == 0:
         return (
             [0] * len(pred_boxes),

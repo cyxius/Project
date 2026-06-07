@@ -27,23 +27,6 @@ def prepare_splits(
     val_only: bool = False,
     max_images: Optional[int] = None,
 ) -> dict:
-    """
-    Process DSDL-format BDD100K annotations into clean/adverse YOLO-format splits.
-
-    Args:
-        raw_dir: Path to data/raw/bdd100k/
-        processed_dir: Path to data/processed/
-        class_mapping: DSDL class_name -> COCO class_id
-        clean_weather: Weather labels for "clean" split
-        adverse_weather: Weather labels for "adverse" split
-        dsdl_train_json: Path to DSDL train_samples.json
-        dsdl_val_json: Path to DSDL val_samples.json
-        val_only: Only process validation set (faster testing)
-        max_images: Cap images per split (for quick testing)
-
-    Returns:
-        dict with split statistics
-    """
     images_base = raw_dir / "images" / "100k"
 
     splits = {
@@ -84,7 +67,6 @@ def prepare_splits(
             if not img_name:
                 continue
 
-            # image_shape is [height, width]
             img_shape = media.get("image_shape", [720, 1280])
 
             img_path = img_dir / img_name
@@ -138,12 +120,10 @@ def prepare_splits(
             elif not src.exists() and not dst.exists():
                 continue
 
-            # Use pre-recorded image dimensions from DSDL (image_shape: [h, w])
             first_box = ann["boxes"][0]
             img_w = first_box["img_w"]
             img_h = first_box["img_h"]
 
-            # Write YOLO format: class_id cx cy w h (normalized)
             with open(label_out / (Path(ann["img_name"]).stem + ".txt"), "w") as f:
                 for box in ann["boxes"]:
                     x1, y1, x2, y2 = box["x1"], box["y1"], box["x2"], box["y2"]

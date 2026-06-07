@@ -19,21 +19,6 @@ def compute_map(
     class_names: dict[int, str],
     iou_threshold: float = 0.5,
 ) -> dict:
-    """
-    Compute mAP and per-class metrics from predictions and ground truth.
-
-    Args:
-        predictions_json: Path to prediction JSON file.
-        label_dir: Directory containing YOLO-format .txt label files.
-        img_dir: Directory containing the corresponding images.
-        class_names: Dict of class_id -> class_name for all mapped classes.
-        iou_threshold: IoU threshold for matching (default 0.5 for mAP@0.5).
-
-    Returns:
-        dict with keys:
-            mAP, per_class_ap, precision, recall, f1,
-            num_images, num_predictions, num_gt_boxes
-    """
     logger.info("Loading ground truth from %s ...", label_dir)
     gt = load_ground_truth_yolo(Path(label_dir), Path(img_dir))
     logger.info("Loading predictions from %s ...", predictions_json)
