@@ -1,0 +1,79 @@
+# Phase 1: Baseline Establishment Configuration
+# =============================================
+
+dataset:
+  name: bdd100k
+  # Where raw data lives (images + DSDL labels)
+  raw_dir: data/raw/bdd100k
+  # Where processed YOLO-format splits are written
+  processed_dir: data/processed
+  # Images are under raw_dir/images/100k/{train,val}
+  images_subdir: images/100k
+
+  # DSDL annotation files (with weather attributes)
+  dsdl_dir: data/BDD100K/dsdl/det_full/dsdl_Det_full
+  train_samples: set-train/train_samples.json
+  val_samples: set-val/val_samples.json
+
+  # Weather categories for splitting
+  clean_weather:
+    - clear
+    - sunny
+    - partly cloudy
+    - overcast
+  adverse_weather:
+    - foggy
+    - rainy
+    - snowy
+
+  # DSDL class name -> COCO class id
+  # Excluded: traffic_light, traffic_sign (imprecise COCO mapping)
+  class_mapping:
+    person: 0
+    rider: 0       # rider -> person (YOLO doesn't distinguish)
+    car: 2
+    truck: 7
+    bus: 5
+    train: 6
+    motor: 3       # motorcycle
+    bike: 1        # bicycle
+
+  class_names:
+    0: person
+    1: bicycle
+    2: car
+    3: motorcycle
+    5: bus
+    6: train
+    7: truck
+
+model:
+  weights: yolov8m.pt
+  imgsz: 640
+  conf_threshold: 0.25
+  iou_threshold: 0.45
+  device: cuda:0
+  batch_size: 16
+
+evaluation:
+  iou_threshold: 0.5
+  max_det: 100
+
+visualization:
+  dpi: 150
+  fig_width: 10
+  fig_height: 6
+
+seed: 42
+output_dir: outputs/phase1
+# Phase 2 output
+phase2_output_dir: outputs/phase2
+
+preprocessing:
+  msrcr:
+    sigma_list: [15, 80, 250]
+    alpha: 125.0
+    beta: 46.0
+  clahe:
+    clip_limit: 2.0
+    tile_grid_size: [8, 8]

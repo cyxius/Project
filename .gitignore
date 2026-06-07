@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# Virtual env
+.venv/
+
+# Data (all dataset files — download BDD100K from OpenDataLab)
+/data/
+
+# Outputs
+outputs/
+runs/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# YOLO model weights
+*.pt
+
+# --- Excluded from GitHub (too polished / non-core) ---
+# Visualization & reporting (student project wouldn't have this)
+src/visualization/
+scripts/generate_report.py
+
+# Auxiliary data utilities (not core methodology)
+src/data/download.py
+src/data/dataset.py
+
+# Unused algorithm
+src/preprocessing/dcp_dehaze.py
+
+# Docs, slides, and AI helper scripts (user manages separately)
+midterm_pre/
+SUMMARY.md
+
