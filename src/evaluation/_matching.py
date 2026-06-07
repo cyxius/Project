@@ -8,7 +8,6 @@ import torchvision.ops as tv_ops
 
 
 def load_ground_truth_yolo(label_dir: Path, img_dir: Path) -> dict:
-
     gt = {}
     label_files = sorted(label_dir.glob("*.txt"))
 

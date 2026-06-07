@@ -3,7 +3,6 @@ from src.evaluation._matching import match_per_image
 
 
 def test_perfect_match():
-    """One prediction perfectly matches one GT."""
     pred_boxes = torch.tensor([[100, 100, 200, 200]], dtype=torch.float32)
     pred_classes = torch.tensor([0], dtype=torch.int64)
     pred_confs = torch.tensor([0.9], dtype=torch.float32)
@@ -18,7 +17,6 @@ def test_perfect_match():
 
 
 def test_no_match_wrong_class():
-    """Prediction and GT have different classes, no match."""
     pred_boxes = torch.tensor([[100, 100, 200, 200]], dtype=torch.float32)
     pred_classes = torch.tensor([0], dtype=torch.int64)
     pred_confs = torch.tensor([0.9], dtype=torch.float32)
@@ -32,7 +30,6 @@ def test_no_match_wrong_class():
 
 
 def test_no_match_low_iou():
-    """Prediction bbox far from GT, IoU below threshold."""
     pred_boxes = torch.tensor([[0, 0, 10, 10]], dtype=torch.float32)
     pred_classes = torch.tensor([0], dtype=torch.int64)
     pred_confs = torch.tensor([0.9], dtype=torch.float32)
@@ -59,7 +56,6 @@ def test_partial_overlap():
 
 
 def test_empty_gt():
-    """No ground truth: all predictions are FP."""
     pred_boxes = torch.tensor([[100, 100, 200, 200]], dtype=torch.float32)
     pred_classes = torch.tensor([0], dtype=torch.int64)
     pred_confs = torch.tensor([0.9], dtype=torch.float32)
@@ -74,7 +70,6 @@ def test_empty_gt():
 
 
 def test_empty_pred():
-    """No predictions: returns empty lists."""
     pred_boxes = torch.empty((0, 4), dtype=torch.float32)
     pred_classes = torch.empty(0, dtype=torch.int64)
     pred_confs = torch.empty(0, dtype=torch.float32)
@@ -89,7 +84,6 @@ def test_empty_pred():
 
 
 def test_multiple_predictions_one_gt():
-    """Multiple predictions, only the best-matching one should be TP."""
     pred_boxes = torch.tensor([
         [100, 100, 200, 200],
         [100, 100, 200, 200],
