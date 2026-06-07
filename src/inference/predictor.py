@@ -1,4 +1,3 @@
-"""Batch YOLO inference with streaming support and structured JSON output."""
 
 import json
 import logging
@@ -100,10 +99,7 @@ def predict_directory(
         "detection_count": total_detections,
         "avg_det_per_image": avg_det,
     }
-    logger.info(
-        "Inference complete%s: %d images, %d detections (avg %.2f/image).",
-        label, image_count, total_detections, avg_det,
-    )
+    logger.info("Inference done: %d images", image_count)
     return summary
 
 

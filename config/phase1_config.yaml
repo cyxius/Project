@@ -27,7 +27,6 @@ dataset:
     - snowy
 
   # DSDL class name -> COCO class id
-  # Excluded: traffic_light, traffic_sign (imprecise COCO mapping)
   class_mapping:
     person: 0
     rider: 0       # rider -> person (YOLO doesn't distinguish)

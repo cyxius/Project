@@ -1,4 +1,3 @@
-"""Shared IoU matching logic for metrics and weather-subset evaluation."""
 
 import json
 from pathlib import Path

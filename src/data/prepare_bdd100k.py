@@ -1,10 +1,3 @@
-"""
-Prepare BDD100K dataset for weather-robustness evaluation.
-
-Parses DSDL-format detection annotations (from OpenDataLab), filters by
-weather attribute (clean vs adverse), converts bboxes to YOLO normalized
-format, and writes per-image .txt label files.
-"""
 
 import json
 import logging

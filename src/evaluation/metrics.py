@@ -1,10 +1,3 @@
-"""
-Evaluation metrics: mAP computation via per-image IoU matching.
-
-Loads YOLO-format ground truth labels and prediction JSON, matches predictions
-to ground truth using IoU threshold, then computes per-class AP via
-ultralytics' ap_per_class.
-"""
 
 import json
 import logging

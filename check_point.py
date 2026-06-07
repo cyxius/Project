@@ -2,16 +2,9 @@ import os
 from ultralytics import YOLO
 
 def main():
-    
-    print(f"recent path: {os.getcwd()}")
-
-    # 2. loading the model (if not present, it will auto-download the 6MB lightweight brain)
-    # this is the YOLOv8 Nano version, only about 6MB
+    print(f"cwd: {os.getcwd()}")
     model = YOLO("yolov8n.pt")
-    
-    print("---")
-    print("succeed to load the model")
-    print("---")
+    print("model loaded")
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,3 @@
-"""Unit tests for IoU matching logic in evaluation/metrics.py."""
-
 import torch
 from src.evaluation._matching import match_per_image
 
