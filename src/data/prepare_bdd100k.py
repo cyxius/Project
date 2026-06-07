@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 def _bbox_to_xyxy(bbox: list[float]) -> tuple[float, float, float, float]:
-    """Convert DSDL bbox [x, y, w, h] to (x1, y1, x2, y2)."""
     x, y, w, h = bbox
     return (x, y, x + w, y + h)
 

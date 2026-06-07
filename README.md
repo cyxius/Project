@@ -14,15 +14,15 @@ pip install torch ultralytics opencv-python matplotlib pyyaml numpy scipy
 ```
 
 You also need BDD100K from OpenDataLab (DSDL format). Put the images and annotation
-JSONs under `data/`. Not included here — too big.
+JSONs under `data/`. Not included here - too big.
 
 ## Usage
 
 ```
-# phase 1 — baseline
+# phase 1 - baseline
 python scripts/run_phase1.py --phase 1 --skip-download --subset 2000
 
-# phase 2 — preprocessing
+# phase 2 - preprocessing
 python scripts/run_phase1.py --phase 2 --skip-download
 
 # run tests
@@ -39,5 +39,5 @@ MSRCR didn't really help (0.2824, actually slightly worse).
 Per-weather: snow is the hardest (0.315 mAP), rain is easier (0.344).
 Fog only had 17 images so we can't say much about it.
 
-Most of the degradation comes from small objects — bicycles and motorcycles
+Most of the degradation comes from small objects - bicycles and motorcycles
 drop the most. Cars and people are pretty robust.

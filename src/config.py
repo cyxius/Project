@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 def _dict_to_ns(d):
-    """Recursively convert dict to SimpleNamespace, resolving Path fields."""
     if not isinstance(d, dict):
         return d
     for k, v in d.items():

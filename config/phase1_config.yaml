@@ -1,5 +1,4 @@
-# Phase 1: Baseline Establishment Configuration
-# =============================================
+# config for phase 1 & 2
 
 dataset:
   name: bdd100k
