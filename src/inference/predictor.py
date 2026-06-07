@@ -87,6 +87,6 @@ def predict_directory(
 
 
 def load_predictions(json_path: Path) -> list[dict]:
-    """Load predictions from a JSON file produced by predict_directory."""
+    
     with open(json_path, "r") as f:
         return json.load(f)

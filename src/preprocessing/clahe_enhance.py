@@ -30,7 +30,7 @@ def enhance_directory(
     clip_limit: float = 2.0,
     tile_grid_size: tuple[int, int] = (8, 8),
 ) -> dict:
-    """Batch CLAHE enhance all .jpg images in input_dir."""
+    
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)

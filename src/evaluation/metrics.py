@@ -77,7 +77,7 @@ def compute_map(
         names=class_names, plot=False, on_plot=None, save_dir=None,
     )
 
-    _, _, p, r, f1, ap, ap_class, p_curve, r_curve, f1_curve, x, prec_values = result
+    _, _, p, r, f1, ap, ap_class, *_ = result
 
     per_class = {}
     valid_ap_list = []

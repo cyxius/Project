@@ -3,7 +3,6 @@ import json
 import logging
 import shutil
 from pathlib import Path
-from typing import Optional
 
 from PIL import Image
 
@@ -24,7 +23,7 @@ def prepare_splits(
     dsdl_train_json: Path,
     dsdl_val_json: Path,
     val_only: bool = False,
-    max_images: Optional[int] = None,
+    max_images: int | None = None,
 ) -> dict:
     images_base = raw_dir / "images" / "100k"
 

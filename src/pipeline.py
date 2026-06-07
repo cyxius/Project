@@ -92,7 +92,7 @@ def run_phase1(config_path: str, skip_download: bool = False, subset_size: int =
     with open(output_dir / "run_metadata.json", "w") as f:
         json.dump(run_meta, f, indent=2, default=str)
 
-    logger.info("=== Phase 1 pipeline complete. Outputs in %s ===", output_dir)
+    logger.info("Phase 1 done")
     return run_meta
 
 
@@ -160,34 +160,32 @@ def run_phase2(
 
     model = YOLO(config.model.weights)
 
-    SPLITS = [
-        {"key": "clean",         "img": config.dataset.processed_dir / "clean/images",           "lbl": config.dataset.processed_dir / "clean/labels"},
-        {"key": "adverse",       "img": config.dataset.processed_dir / "adverse/images",         "lbl": config.dataset.processed_dir / "adverse/labels"},
-        {"key": "adverse_msrcr",   "img": config.dataset.processed_dir / "adverse_msrcr/images",     "lbl": config.dataset.processed_dir / "adverse/labels"},
-        {"key": "adverse_clahe", "img": config.dataset.processed_dir / "adverse_clahe/images",   "lbl": config.dataset.processed_dir / "adverse/labels"},
-    ]
+    splits = [("clean", config.dataset.processed_dir / "clean/images", config.dataset.processed_dir / "clean/labels"),
+             ("adverse", config.dataset.processed_dir / "adverse/images", config.dataset.processed_dir / "adverse/labels"),
+             ("adverse_msrcr", config.dataset.processed_dir / "adverse_msrcr/images", config.dataset.processed_dir / "adverse/labels"),
+             ("adverse_clahe", config.dataset.processed_dir / "adverse_clahe/images", config.dataset.processed_dir / "adverse/labels")]
 
-    for sp in SPLITS:
+    for key, img, lbl in splits:
         pred_json = output_dir / "predictions" / f"{sp['key']}_predictions.json"
         predict_directory(
-            model=model, image_dir=sp["img"], output_json=pred_json,
+            model=model, image_dir=img, output_json=pred_json,
             conf=config.model.conf_threshold, iou=config.model.iou_threshold,
-            imgsz=config.model.imgsz, device=config.model.device, split_name=sp["key"],
+            imgsz=config.model.imgsz, device=config.model.device, split_name=key,
         )
 
     logger.info("Computing metrics...")
     all_metrics = {}
-    for sp in SPLITS:
+    for key, img, lbl in splits:
         pred_json = output_dir / "predictions" / f"{sp['key']}_predictions.json"
         metrics = compute_map(
             predictions_json=pred_json,
-            label_dir=sp["lbl"],
-            img_dir=sp["img"],
+            label_dir=lbl,
+            img_dir=img,
             class_names=config.dataset.class_names,
             iou_threshold=config.evaluation.iou_threshold,
         )
         save_metrics(metrics, output_dir / "metrics" / f"{sp['key']}_metrics.json")
-        all_metrics[sp["key"]] = metrics
+        all_metrics[key] = metrics
 
     logger.info("Per-weather breakdown...")
     from .data.weather import build_weather_mapping, compute_weather_metrics
@@ -216,5 +214,5 @@ def run_phase2(
     with open(output_dir / "run_metadata.json", "w") as f:
         json.dump(run_meta, f, indent=2, default=str)
 
-    logger.info("=== Phase 2 pipeline complete. Outputs in %s ===", output_dir)
+    logger.info("Phase 2 done")
     return {"all_metrics": all_metrics, "weather_metrics": weather_metrics}

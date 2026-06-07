@@ -17,7 +17,7 @@ def build_weather_mapping(
     dsdl_val_json: Path,
     image_dir: Path,
 ) -> dict[str, str]:
-    """Build dict of image_filename -> weather_label from DSDL annotations."""
+    
     weather_map = {}
     existing = set(p.name for p in Path(image_dir).glob("*.jpg"))
 
@@ -51,7 +51,7 @@ def compute_weather_metrics(
     iou_threshold: float = 0.5,
     target_weathers: list[str] | None = None,
 ) -> dict[str, dict]:
-    """Compute per-weather mAP from predictions and weather labels."""
+    
     gt = load_ground_truth_yolo(Path(label_dir), Path(img_dir))
     preds = load_predictions_json(Path(predictions_json))
 

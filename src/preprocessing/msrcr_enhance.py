@@ -46,7 +46,7 @@ def enhance_directory(
     alpha: float = 125.0,
     beta: float = 46.0,
 ) -> dict:
-    """Batch MSRCR enhance all .jpg images in input_dir."""
+    
     if sigma_list is None:
         sigma_list = [15, 80, 250]
 
