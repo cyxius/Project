@@ -1,4 +1,3 @@
-"""Weather-subset tracking: build image→weather mapping and compute per-weather mAP."""
 
 import json
 import logging
@@ -18,17 +17,7 @@ def build_weather_mapping(
     dsdl_val_json: Path,
     image_dir: Path,
 ) -> dict[str, str]:
-    """
-    Build {image_filename: weather_label} from DSDL annotations.
-
-    Args:
-        dsdl_train_json: Path to DSDL train_samples.json.
-        dsdl_val_json: Path to DSDL val_samples.json.
-        image_dir: Only include images that exist in this directory.
-
-    Returns:
-        dict like {"abc123.jpg": "rainy", "def456.jpg": "foggy", ...}
-    """
+    """Build dict of image_filename -> weather_label from DSDL annotations."""
     weather_map = {}
     existing = set(p.name for p in Path(image_dir).glob("*.jpg"))
 
@@ -62,21 +51,7 @@ def compute_weather_metrics(
     iou_threshold: float = 0.5,
     target_weathers: list[str] | None = None,
 ) -> dict[str, dict]:
-    """
-    Compute per-weather mAP by partitioning predictions and GT.
-
-    Args:
-        predictions_json: Path to prediction JSON.
-        label_dir: Directory with YOLO-format GT labels.
-        img_dir: Directory with images.
-        weather_map: {image_name: weather_label} mapping.
-        class_names: Class ID → name dict.
-        iou_threshold: IoU threshold for matching.
-        target_weathers: Weather types to compute (default: all found).
-
-    Returns:
-        {weather_label: {mAP, per_class_ap, num_images, num_predictions, num_gt_boxes}}
-    """
+    """Compute per-weather mAP from predictions and weather labels."""
     gt = load_ground_truth_yolo(Path(label_dir), Path(img_dir))
     preds = load_predictions_json(Path(predictions_json))
 

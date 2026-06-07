@@ -5,11 +5,15 @@ import json
 from pathlib import Path
 
 from .config import load_config
-from .data.download import print_guide, verify_dataset
 from .data.prepare_bdd100k import prepare_splits, generate_yolo_yaml
-from .data.dataset import get_split_stats, verify_label_integrity, print_stats
 from .inference.predictor import predict_directory
 from .evaluation.metrics import compute_map, save_metrics
+try:
+    from .data.download import print_guide, verify_dataset
+    from .data.dataset import get_split_stats, verify_label_integrity, print_stats
+    _HAS_UTILS = True
+except ImportError:
+    _HAS_UTILS = False
 try:
     from .visualization.charts import (
         plot_map_comparison, plot_pr_curves, plot_confidence_histogram,
@@ -40,12 +44,14 @@ def run_phase1(config_path: str, skip_download: bool = False, subset_size: int =
     output_dir = config.output_dir
 
     # ---- Step 0: Dataset verification or guide ----
-    if not skip_download:
+    if _HAS_UTILS and not skip_download:
         stats = verify_dataset(config.dataset.raw_dir)
         if not stats["ready"]:
             print_guide(config.dataset.raw_dir)
             logger.warning("BDD100K dataset not ready. Follow instructions above and re-run.")
             return {}
+    elif not _HAS_UTILS:
+        logger.info("Skipping dataset verification (module not available).")
     else:
         logger.info("Skipping dataset verification (--skip-download).")
 
@@ -70,13 +76,12 @@ def run_phase1(config_path: str, skip_download: bool = False, subset_size: int =
             config.dataset.class_names,
             split_dir / f"data_{split_key}.yaml",
         )
-        # Print stats
-        stats = get_split_stats(split_dir, config.dataset.class_names)
-        print_stats(stats, split_key)
-        # Integrity check
-        integrity = verify_label_integrity(split_dir)
-        if not integrity["ok"]:
-            logger.warning("Label integrity issues in %s split.", split_key)
+        if _HAS_UTILS:
+            stats = get_split_stats(split_dir, config.dataset.class_names)
+            print_stats(stats, split_key)
+            integrity = verify_label_integrity(split_dir)
+            if not integrity["ok"]:
+                logger.warning("Label integrity issues in %s split.", split_key)
 
     # ---- Step 2: Batch inference ----
     logger.info("=== Step 2: Running batch inference ===")

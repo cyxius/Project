@@ -1,5 +1,3 @@
-"""CLAHE contrast enhancement on LAB L-channel."""
-
 import logging
 import time
 from pathlib import Path
@@ -15,17 +13,7 @@ def enhance(
     clip_limit: float = 2.0,
     tile_grid_size: tuple[int, int] = (8, 8),
 ) -> np.ndarray:
-    """
-    Enhance contrast via CLAHE on LAB L-channel.
-
-    Args:
-        image: HxWx3 uint8 BGR image.
-        clip_limit: CLAHE contrast clip limit.
-        tile_grid_size: (cols, rows) tile grid.
-
-    Returns:
-        HxWx3 uint8 BGR image.
-    """
+    """CLAHE on LAB L-channel. Returns HxWx3 uint8 BGR."""
     lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
     l, a, b = cv2.split(lab)
 
@@ -42,12 +30,7 @@ def enhance_directory(
     clip_limit: float = 2.0,
     tile_grid_size: tuple[int, int] = (8, 8),
 ) -> dict:
-    """
-    Batch CLAHE-enhance all .jpg images in input_dir.
-
-    Returns:
-        dict with image_count, time_elapsed_sec, avg_ms_per_image.
-    """
+    """Batch CLAHE enhance all .jpg images in input_dir."""
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)

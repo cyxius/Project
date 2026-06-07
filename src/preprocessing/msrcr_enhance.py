@@ -1,5 +1,3 @@
-"""Multi-Scale Retinex with Color Restoration (MSRCR) — PyTorch CUDA version."""
-
 import logging
 import time
 from pathlib import Path
@@ -11,7 +9,6 @@ import torch.nn.functional as F
 
 logger = logging.getLogger(__name__)
 
-# Pre-compute Gaussian kernels once (module-level cache)
 _KERNEL_CACHE = {}
 
 
@@ -56,17 +53,7 @@ def msrcr(
     alpha: float = 125.0,
     beta: float = 46.0,
 ) -> np.ndarray:
-    """
-    Multi-Scale Retinex with Color Restoration — GPU-accelerated.
-
-    Args:
-        image: HxWx3 uint8 BGR image.
-        sigma_list: Gaussian sigmas. Default [15, 80, 250].
-        alpha, beta: Color restoration params.
-
-    Returns:
-        HxWx3 uint8 BGR image.
-    """
+    """MSRCR enhancement. GPU if available, CPU fallback otherwise."""
     if sigma_list is None:
         sigma_list = [15, 80, 250]
 
@@ -142,12 +129,7 @@ def enhance_directory(
     alpha: float = 125.0,
     beta: float = 46.0,
 ) -> dict:
-    """
-    Batch MSRCR-enhance all .jpg images in input_dir (GPU-accelerated).
-
-    Returns:
-        dict with image_count, time_elapsed_sec, avg_ms_per_image.
-    """
+    """Batch MSRCR enhance all .jpg images in input_dir."""
     if sigma_list is None:
         sigma_list = [15, 80, 250]
 

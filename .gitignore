@@ -27,4 +27,5 @@ src/visualization/
 src/data/download.py
 src/data/dataset.py
 src/preprocessing/dcp_dehaze.py
-scripts/generate_report.py
+scripts/*
+!scripts/run_phase1.py

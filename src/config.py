@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_config(config_path: str) -> SimpleNamespace:
-    """Load and validate YAML config, returning a namespace with absolute paths."""
+    """Load YAML config and return namespace with resolved paths."""
     path = Path(config_path)
     if not path.exists():
         raise FileNotFoundError(f"Config file not found: {path}")
