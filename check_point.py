@@ -3,7 +3,7 @@ from ultralytics import YOLO
 
 def main():
     
-    print(f"当前执行路径: {os.getcwd()}")
+    print(f"recent path: {os.getcwd()}")
 
     # 2. loading the model (if not present, it will auto-download the 6MB lightweight brain)
     # this is the YOLOv8 Nano version, only about 6MB

@@ -4,46 +4,27 @@ __pycache__/
 *.egg-info/
 .eggs/
 
-# Virtual env
-.venv/
+# Hidden / config
+.*
+!.gitignore
 
-# Data (all dataset files — download BDD100K from OpenDataLab)
+# Data
 /data/
 
 # Outputs
 outputs/
 runs/
 
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
 # Jupyter
 .ipynb_checkpoints/
 
-# YOLO model weights
+# Models
 *.pt
 
-# --- Excluded from GitHub (too polished / non-core) ---
-# Visualization & reporting (student project wouldn't have this)
-src/visualization/
-scripts/generate_report.py
-
-# Auxiliary data utilities (not core methodology)
-src/data/download.py
-src/data/dataset.py
-
-# Unused algorithm
-src/preprocessing/dcp_dehaze.py
-
-# Docs, slides, and AI helper scripts (user manages separately)
 midterm_pre/
 SUMMARY.md
-
-# Claude config
-.claude/
-
+src/visualization/
+src/data/download.py
+src/data/dataset.py
+src/preprocessing/dcp_dehaze.py
+scripts/generate_report.py
