@@ -19,7 +19,7 @@ def build_weather_mapping(
 ) -> dict[str, str]:
     
     weather_map = {}
-    existing = set(p.name for p in Path(image_dir).glob("*.jpg"))
+    existing = set(p.name for p in image_dir.glob("*.jpg"))
 
     for json_path in [dsdl_train_json, dsdl_val_json]:
         if not json_path.exists():
@@ -32,7 +32,6 @@ def build_weather_mapping(
             if name and weather and name in existing:
                 weather_map[name] = weather.lower().strip()
 
-    # Log distribution
     counts = {}
     for w in weather_map.values():
         counts[w] = counts.get(w, 0) + 1
@@ -55,7 +54,6 @@ def compute_weather_metrics(
     gt = load_ground_truth_yolo(Path(label_dir), Path(img_dir))
     preds = load_predictions_json(Path(predictions_json))
 
-    # Group metadata by weather
     weather_groups = {}
     if target_weathers is None:
         weathers_seen = set(weather_map.values())
@@ -91,7 +89,6 @@ def compute_weather_metrics(
             weather_groups[w]["conf"].extend(confs)
             weather_groups[w]["pred_cls"].extend(pred_cls)
 
-    # Compute mAP per weather
     results = {}
     for w in target_weathers:
         g = weather_groups[w]

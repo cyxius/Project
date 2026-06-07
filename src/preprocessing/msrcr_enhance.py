@@ -50,8 +50,6 @@ def enhance_directory(
     if sigma_list is None:
         sigma_list = [15, 80, 250]
 
-    input_dir = Path(input_dir)
-    output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     image_files = sorted(input_dir.glob("*.jpg"))

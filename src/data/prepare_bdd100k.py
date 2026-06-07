@@ -148,7 +148,6 @@ def generate_yolo_yaml(
     class_names: dict[int, str],
     output_path: Path,
 ) -> None:
-    """Generate an ultralytics-compatible dataset YAML for a processed split."""
     import yaml
     nc = len(class_names)
     names_list = [class_names[k] for k in sorted(class_names.keys())]

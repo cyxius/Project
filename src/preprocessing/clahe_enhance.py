@@ -31,8 +31,6 @@ def enhance_directory(
     tile_grid_size: tuple[int, int] = (8, 8),
 ) -> dict:
     
-    input_dir = Path(input_dir)
-    output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     image_files = sorted(input_dir.glob("*.jpg"))

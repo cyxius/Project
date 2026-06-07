@@ -91,8 +91,8 @@ def test_empty_pred():
 def test_multiple_predictions_one_gt():
     """Multiple predictions, only the best-matching one should be TP."""
     pred_boxes = torch.tensor([
-        [100, 100, 200, 200],  # Perfect match -> TP
-        [100, 100, 200, 200],  # Duplicate, GT already matched -> FP
+        [100, 100, 200, 200],
+        [100, 100, 200, 200],
     ], dtype=torch.float32)
     pred_classes = torch.tensor([0, 0], dtype=torch.int64)
     pred_confs = torch.tensor([0.9, 0.8], dtype=torch.float32)

@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Weather-Robustness Evaluation Pipeline"
+        description="run phase 1 or 2"
     )
     parser.add_argument(
         "--phase", type=int, choices=[1, 2], default=1,

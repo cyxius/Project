@@ -79,7 +79,7 @@ def run_phase1(config_path: str, skip_download: bool = False, subset_size: int =
         all_metrics[split_key] = metrics
 
     clean_metrics = all_metrics.get("clean", {})
-    foggy_metrics = all_metrics.get("adverse", {})
+    adverse_metrics = all_metrics.get("adverse", {})
 
     # save results
     run_meta = {
@@ -87,7 +87,7 @@ def run_phase1(config_path: str, skip_download: bool = False, subset_size: int =
         "subset_size": subset_size,
         "summaries": all_summaries,
         "clean_metrics": clean_metrics,
-        "foggy_metrics": foggy_metrics,
+        "adverse_metrics": adverse_metrics,
     }
     with open(output_dir / "run_metadata.json", "w") as f:
         json.dump(run_meta, f, indent=2, default=str)
@@ -166,7 +166,7 @@ def run_phase2(
              ("adverse_clahe", config.dataset.processed_dir / "adverse_clahe/images", config.dataset.processed_dir / "adverse/labels")]
 
     for key, img, lbl in splits:
-        pred_json = output_dir / "predictions" / f"{sp['key']}_predictions.json"
+        pred_json = output_dir / "predictions" / f"{key}_predictions.json"
         predict_directory(
             model=model, image_dir=img, output_json=pred_json,
             conf=config.model.conf_threshold, iou=config.model.iou_threshold,
@@ -176,7 +176,7 @@ def run_phase2(
     logger.info("Computing metrics...")
     all_metrics = {}
     for key, img, lbl in splits:
-        pred_json = output_dir / "predictions" / f"{sp['key']}_predictions.json"
+        pred_json = output_dir / "predictions" / f"{key}_predictions.json"
         metrics = compute_map(
             predictions_json=pred_json,
             label_dir=lbl,
@@ -184,7 +184,7 @@ def run_phase2(
             class_names=config.dataset.class_names,
             iou_threshold=config.evaluation.iou_threshold,
         )
-        save_metrics(metrics, output_dir / "metrics" / f"{sp['key']}_metrics.json")
+        save_metrics(metrics, output_dir / "metrics" / f"{key}_metrics.json")
         all_metrics[key] = metrics
 
     logger.info("Per-weather breakdown...")
