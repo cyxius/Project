@@ -44,3 +44,6 @@ src/preprocessing/dcp_dehaze.py
 midterm_pre/
 SUMMARY.md
 
+# Claude config
+.claude/
+

@@ -1,87 +1,43 @@
-# Enhancing Robustness in Adverse Weather Conditions
+# Weather Robustness Project
 
-Laborprojekt Servicerobotik / Bildverarbeitung fur Robotik — SS 2026
+SS 2026, Sihan Chen & Yuxuan Chen
 
-## What we did
-
-We evaluated how bad weather (rain, snow, fog) hurts YOLOv8m object detection on the
-BDD100K dataset, and tried to fix it with simple image preprocessing — no model
-retraining needed.
-
-- **Phase 1**: Ran YOLOv8m on 2000 clean vs 2000 adverse images, measured the gap.
-  Clean mAP@0.5 = 0.3539, Adverse = 0.2941 → **16.9% drop**.
-- **Phase 2**: Applied MSRCR and CLAHE to adverse images before feeding them to the
-  same model. CLAHE recovered about **10.9%** of the gap. MSRCR didn't help much.
+We tested how bad weather affects YOLOv8m on BDD100K, and whether MSRCR/CLAHE
+preprocessing can recover the lost accuracy without retraining.
 
 ## Setup
 
-Python 3.11, PyTorch 2.6, Ultralytics 8.4. GPU with 8GB VRAM recommended.
+Python 3.11 + PyTorch 2.6. GPU helps a lot (we used an RTX 3070 laptop).
 
-```bash
-pip install torch ultralytics opencv-python numpy scipy matplotlib pyyaml pillow python-docx
+```
+pip install torch ultralytics opencv-python matplotlib pyyaml numpy scipy
 ```
 
-## Dataset
+You also need BDD100K from OpenDataLab (DSDL format). Put the images and annotation
+JSONs under `data/`. Not included here — too big.
 
-We use BDD100K from [OpenDataLab](https://opendatalab.com/BDD100K) (DSDL format).
+## Usage
 
-After downloading, put:
-- Images under `data/raw/bdd100k/images/100k/{train,val}/`
-- DSDL annotation JSONs under `data/BDD100K/dsdl/det_full/dsdl_Det_full/`
-  (these contain weather labels, not included here due to size)
-
-The dataset splits images by weather:
-- **Clean**: clear, sunny, partly cloudy, overcast
-- **Adverse**: rainy, snowy, foggy
-
-## How to run
-
-```bash
-# Phase 1 — baseline
+```
+# phase 1 — baseline
 python scripts/run_phase1.py --phase 1 --skip-download --subset 2000
 
-# Phase 2 — preprocessing recovery (full)
+# phase 2 — preprocessing
 python scripts/run_phase1.py --phase 2 --skip-download
 
-# Skip MSRCR/CLAHE if already processed
-python scripts/run_phase1.py --phase 2 --skip-download --skip-preprocessing
-
-# Tests
+# run tests
 PYTHONPATH=. python tests/test_metrics.py
 ```
 
-## Results
+## What we got
 
-### Phase 1 — Clean vs Adverse
+Phase 1: Clean mAP@0.5 = 0.3539, Adverse = 0.2941. That's a 16.9% drop.
 
-| | Clean | Adverse | Drop |
-|---|-------|---------|------|
-| mAP@0.5 | 0.3539 | 0.2941 | 16.9% |
+Phase 2: CLAHE brought adverse up to 0.3006 (recovers ~11% of the gap).
+MSRCR didn't really help (0.2824, actually slightly worse).
 
-### Phase 2 — Preprocessing Recovery
+Per-weather: snow is the hardest (0.315 mAP), rain is easier (0.344).
+Fog only had 17 images so we can't say much about it.
 
-| Condition | mAP@0.5 | Recovery |
-|-----------|---------|----------|
-| Clean | 0.3539 | — |
-| Adverse (raw) | 0.2941 | baseline |
-| + MSRCR | 0.2824 | -19.6% (slight decrease) |
-| + CLAHE | 0.3006 | +10.9% |
-
-### Per-Weather
-
-| Weather | Images | mAP@0.5 |
-|---------|--------|---------|
-| snowy | 992 | 0.315 |
-| rainy | 991 | 0.344 |
-| foggy | 17 | 0.371* |
-
-*only 17 images, not reliable
-
-## What's next
-
-- RT-DETR (Transformer) — cross-architecture comparison
-- Grad-CAM — visualize what the model actually looks at in bad weather
-
-## Team
-
-Sihan Chen (3872154), Yuxuan Chen (3619935)
+Most of the degradation comes from small objects — bicycles and motorcycles
+drop the most. Cars and people are pretty robust.
