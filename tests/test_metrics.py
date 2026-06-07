@@ -3,6 +3,7 @@ from src.evaluation._matching import match_per_image
 
 
 def test_perfect_match():
+    """basic test - perfect match case"""
     pred_boxes = torch.tensor([[100, 100, 200, 200]], dtype=torch.float32)
     pred_classes = torch.tensor([0], dtype=torch.int64)
     pred_confs = torch.tensor([0.9], dtype=torch.float32)
@@ -84,6 +85,7 @@ def test_empty_pred():
 
 
 def test_multiple_predictions_one_gt():
+    """only first pred should match"""
     pred_boxes = torch.tensor([
         [100, 100, 200, 200],
         [100, 100, 200, 200],

@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 def enhance(image, clip_limit=2.0, tile_grid_size=(8, 8)):
+    # CLAHE增强，在LAB的L通道上做
     lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
     l, a, b = cv2.split(lab)
     clahe = cv2.createCLAHE(clipLimit=clip_limit, tileGridSize=tile_grid_size)

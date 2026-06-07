@@ -12,10 +12,9 @@ logger = logging.getLogger(__name__)
 
 
 def run_phase1(config_path: str, subset_size: int = None) -> dict:
+    from ultralytics import YOLO
     config = load_config(config_path)
-
-    output_dir = config.output_dir
-
+    out = config.output_dir
     logger.info("Preparing splits...")
     split_info = prepare_splits(
         raw_dir=config.dataset.raw_dir,
@@ -38,14 +37,13 @@ def run_phase1(config_path: str, subset_size: int = None) -> dict:
         )
 
     logger.info("Running inference...")
-    from ultralytics import YOLO
-
     model = YOLO(config.model.weights)
 
     all_summaries = {}
+    # print(f"DEBUG: using {config.model.weights}")
     for split_key in ["clean", "adverse"]:
         img_dir = config.dataset.processed_dir / split_key / "images"
-        pred_json = output_dir / "predictions" / f"{split_key}_predictions.json"
+        pred_json = out / "predictions" / f"{split_key}_predictions.json"
 
         summary = predict_directory(
             model=model,
@@ -62,7 +60,7 @@ def run_phase1(config_path: str, subset_size: int = None) -> dict:
     logger.info("Computing metrics...")
     all_metrics = {}
     for split_key in ["clean", "adverse"]:
-        pred_json = output_dir / "predictions" / f"{split_key}_predictions.json"
+        pred_json = out / "predictions" / f"{split_key}_predictions.json"
         label_dir = config.dataset.processed_dir / split_key / "labels"
         img_dir = config.dataset.processed_dir / split_key / "images"
 
@@ -74,7 +72,7 @@ def run_phase1(config_path: str, subset_size: int = None) -> dict:
             iou_threshold=config.evaluation.iou_threshold,
         )
 
-        metrics_json = output_dir / "metrics" / f"{split_key}_metrics.json"
+        metrics_json = out / "metrics" / f"{split_key}_metrics.json"
         save_metrics(metrics, metrics_json)
         all_metrics[split_key] = metrics
 
@@ -89,7 +87,7 @@ def run_phase1(config_path: str, subset_size: int = None) -> dict:
         "clean_metrics": clean_metrics,
         "adverse_metrics": adverse_metrics,
     }
-    with open(output_dir / "run_metadata.json", "w") as f:
+    with open(out / "run_metadata.json", "w") as f:
         json.dump(run_meta, f, indent=2, default=str)
 
     logger.info("Phase 1 done")
@@ -155,8 +153,6 @@ def run_phase2(
         logger.info("Skipping CLAHE (--skip-preprocessing).")
 
     logger.info("Running inference...")
-    from ultralytics import YOLO
-
     model = YOLO(config.model.weights)
 
     splits = [("clean", config.dataset.processed_dir / "clean/images", config.dataset.processed_dir / "clean/labels"),

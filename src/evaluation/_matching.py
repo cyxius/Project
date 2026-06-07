@@ -76,6 +76,7 @@ def match_per_image(
     gt_classes: torch.Tensor,
     iou_threshold: float,
 ) -> tuple:
+    # IoU matching, one GT per prediction (best match wins)
     if len(gt_boxes) == 0:
         return (
             [0] * len(pred_boxes),

@@ -1,9 +1,10 @@
-import yaml
-
 import json
 import logging
+import os
 import shutil
 from pathlib import Path
+
+import yaml
 
 from PIL import Image
 
@@ -25,6 +26,8 @@ def prepare_splits(
     dsdl_val_json: Path,
     max_images: int | None = None,
 ) -> dict:
+    # parse DSDL annotations and split into clean/adverse
+    # outputs YOLO-format labels to processed_dir
     images_base = raw_dir / "images" / "100k"
 
     splits = {
@@ -104,8 +107,8 @@ def prepare_splits(
 
         label_out = processed_dir / split_key / "labels"
         img_out = processed_dir / split_key / "images"
-        label_out.mkdir(parents=True, exist_ok=True)
-        img_out.mkdir(parents=True, exist_ok=True)
+        os.makedirs(label_out, exist_ok=True)
+        os.makedirs(img_out, exist_ok=True)
 
         total_boxes = 0
         copied = 0

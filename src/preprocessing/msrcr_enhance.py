@@ -7,6 +7,9 @@ logger = logging.getLogger(__name__)
 
 
 def msrcr(image, sigma_list=None, alpha=125.0, beta=46.0):
+    # MSRCR - multi-scale retinex with color restoration
+    # sigma_list: gaussian blur scales (tuned these by trial and error)
+    # alpha/beta: color restoration strength
     if sigma_list is None:
         sigma_list = [15, 80, 250]
     img_float = image.astype(np.float64) + 1.0

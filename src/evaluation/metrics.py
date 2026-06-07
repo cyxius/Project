@@ -19,9 +19,10 @@ def compute_map(
     class_names: dict[int, str],
     iou_threshold: float = 0.5,
 ) -> dict:
-    logger.info("Loading ground truth from %s ...", label_dir)
+    # calculate mAP from predictions and YOLO labels
+    logger.info(f"Loading ground truth from {label_dir}")
     gt = load_ground_truth_yolo(Path(label_dir), Path(img_dir))
-    logger.info("Loading predictions from %s ...", predictions_json)
+    logger.info(f"Loading predictions from {predictions_json}")
     preds = load_predictions_json(Path(predictions_json))
 
     all_tp = []
