@@ -1,3 +1,4 @@
+from collections import Counter
 
 import json
 import logging
@@ -32,7 +33,6 @@ def build_weather_mapping(
             if name and weather and name in existing:
                 weather_map[name] = weather.lower().strip()
 
-    from collections import Counter
     for w, c in Counter(weather_map.values()).most_common():
         logger.info("  Weather '%s': %d images", w, c)
 
@@ -104,7 +104,7 @@ def compute_weather_metrics(
             tp_arr, conf_arr, pred_cls_arr, target_cls,
             names=class_names, plot=False, on_plot=None, save_dir=None,
         )
-        _, _, p, r, f1, ap, ap_class, _, _, _, _, _ = result
+        _, _, p, r, f1, ap, ap_class, *_ = result
 
         per_class = {}
         valid_ap = []

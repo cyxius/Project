@@ -1,3 +1,4 @@
+import yaml
 
 import json
 import logging
@@ -22,7 +23,6 @@ def prepare_splits(
     adverse_weather: list[str],
     dsdl_train_json: Path,
     dsdl_val_json: Path,
-    val_only: bool = False,
     max_images: int | None = None,
 ) -> dict:
     images_base = raw_dir / "images" / "100k"
@@ -36,7 +36,7 @@ def prepare_splits(
     json_sources = []
     if dsdl_val_json.exists():
         json_sources.append(("val", dsdl_val_json, images_base / "val"))
-    if dsdl_train_json.exists() and not val_only:
+    if dsdl_train_json.exists():
         json_sources.append(("train", dsdl_train_json, images_base / "train"))
 
     if not json_sources:
@@ -148,7 +148,6 @@ def generate_yolo_yaml(
     class_names: dict[int, str],
     output_path: Path,
 ) -> None:
-    import yaml
     nc = len(class_names)
     names_list = [class_names[k] for k in sorted(class_names.keys())]
     content = {

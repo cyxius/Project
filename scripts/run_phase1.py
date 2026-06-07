@@ -49,7 +49,6 @@ def main():
         from src.pipeline import run_phase2
         run_phase2(
             config_path=args.config,
-            skip_download=args.skip_download,
             subset_size=args.subset,
             skip_preprocessing=args.skip_preprocessing,
         )

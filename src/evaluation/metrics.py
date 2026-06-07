@@ -105,7 +105,6 @@ def compute_map(
 
 
 def save_metrics(metrics: dict, output_path: Path) -> None:
-    """Save metrics dict as JSON."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w") as f:
         json.dump(metrics, f, indent=2)
@@ -113,6 +112,5 @@ def save_metrics(metrics: dict, output_path: Path) -> None:
 
 
 def load_metrics(json_path: Path) -> dict:
-    """Load metrics from a JSON file."""
     with open(json_path, "r") as f:
         return json.load(f)

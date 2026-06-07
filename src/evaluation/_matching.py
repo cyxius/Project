@@ -1,3 +1,4 @@
+from PIL import Image
 
 import json
 from pathlib import Path

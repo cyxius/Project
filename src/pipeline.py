@@ -98,7 +98,6 @@ def run_phase1(config_path: str, skip_download: bool = False, subset_size: int =
 
 def run_phase2(
     config_path: str,
-    skip_download: bool = False,
     subset_size: int = None,
     skip_preprocessing: bool = False,
 ) -> dict:
